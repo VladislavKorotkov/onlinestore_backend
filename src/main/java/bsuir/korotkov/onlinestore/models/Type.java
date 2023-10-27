@@ -19,13 +19,12 @@ public class Type {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    public Type() {
-    }
-
     @Column(name = "name")
     @NotEmpty(message="Название не может быть пустым")
     private String name;
 
+    public Type() {
+    }
     public void setId(int id) {
         this.id = id;
     }

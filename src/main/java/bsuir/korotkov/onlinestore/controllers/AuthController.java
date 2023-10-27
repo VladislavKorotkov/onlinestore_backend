@@ -39,11 +39,6 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
     }
 
-    @GetMapping("/registration")
-    public Map<String, String> wow(){
-        return Map.of("asd", "sdf");
-    }
-
     @PostMapping("/registration")
     public Map<String, String> performRegistration(@RequestBody @Valid AccountDTO accountDTO,
                                                    BindingResult bindingResult) {
@@ -52,7 +47,8 @@ public class AuthController {
         accountValidator.validate(account, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return Map.of("message", "Ошибка!");
+
+            return Map.of("error", bindingResult.getAllErrors().get(0).getDefaultMessage());
         }
 
         registrationService.register(account);
@@ -70,7 +66,7 @@ public class AuthController {
         try {
             authenticationManager.authenticate(authInputToken);
         } catch (BadCredentialsException e) {
-            return Map.of("message", "Incorrect credentials!");
+            return Map.of("error", "Неверный логин или пароль");
         }
 
         String token = jwtUtil.generateToken(accountDTO.getUsername());
