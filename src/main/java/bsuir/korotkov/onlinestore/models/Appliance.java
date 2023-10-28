@@ -10,6 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class Appliance {
     private String name;
 
     @Column(name = "price")
-    @NotEmpty(message = "Цена не может быть пустой")
+    @NotNull(message = "Цена не может быть пустой")
     private int price;
 
     @Column(name = "img")

@@ -33,7 +33,7 @@ public class Address {
 
     @Column(name = "number_house")
     @NotEmpty(message = "Номер дома не может быть пустым")
-    private String number_house;
+    private String number;
 
     @OneToMany(mappedBy = "address_order")
     List<Order> orders;
@@ -42,7 +42,7 @@ public class Address {
         this.country = country;
         this.city = city;
         this.street = street;
-        this.number_house = number_house;
+        this.number = number_house;
     }
 
     public void setId(int id) {
@@ -61,8 +61,8 @@ public class Address {
         this.street = street;
     }
 
-    public void setNumber_house(String number_house) {
-        this.number_house = number_house;
+    public void setNumber(String number_house) {
+        this.number = number_house;
     }
 
     public void setOrders(List<Order> orders) {
@@ -88,8 +88,8 @@ public class Address {
         return street;
     }
 
-    public String getNumber_house() {
-        return number_house;
+    public String getNumber() {
+        return number;
     }
 
     public List<Order> getOrders() {

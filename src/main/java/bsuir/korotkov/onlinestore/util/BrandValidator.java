@@ -30,6 +30,6 @@ public class BrandValidator implements Validator {
         catch (UsernameNotFoundException ignored){
             return;
         }
-        errors.rejectValue("name", "", "Данный бренд уже добавлен");
+        errors.rejectValue("name", "", "Бренд с данным названием уже существует");
     }
 }
