@@ -93,7 +93,7 @@ public class TypeController {
         ErrorResponse response = new ErrorResponse(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
-    public Type convertToType(TypeDTO typeDTO) {
+    private Type convertToType(TypeDTO typeDTO) {
         return this.modelMapper.map(typeDTO, Type.class);
     }
 }
