@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +21,10 @@ public class TypeService {
     @Transactional
     public void createType(Type type){
         typeRepository.save(type);
+    }
+
+    public List<Type> getAllTypes(){
+        return typeRepository.findAll();
     }
     public Type loadTypeByName(String s) throws UsernameNotFoundException {
         Optional<Type> type  = typeRepository.findByName(s);

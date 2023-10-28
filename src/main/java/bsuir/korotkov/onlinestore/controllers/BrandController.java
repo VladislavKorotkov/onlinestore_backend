@@ -32,7 +32,7 @@ public class BrandController {
         this.brandValidator = brandValidator;
     }
     @PostMapping
-    public Map<String, String> createBrand(@RequestBody @Valid BrandDTO brandDTO,
+    public Map<String, String> create(@RequestBody @Valid BrandDTO brandDTO,
                                            BindingResult bindingResult){
         Brand brand = convertToBrand(brandDTO);
 
