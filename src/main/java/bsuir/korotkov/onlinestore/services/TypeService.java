@@ -3,8 +3,8 @@ package bsuir.korotkov.onlinestore.services;
 
 import bsuir.korotkov.onlinestore.models.Type;
 import bsuir.korotkov.onlinestore.repositories.TypeRepository;
+import bsuir.korotkov.onlinestore.util.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,12 +26,34 @@ public class TypeService {
     public List<Type> getAllTypes(){
         return typeRepository.findAll();
     }
-    public Type loadTypeByName(String s) throws UsernameNotFoundException {
+
+    public Type loadTypeByName(String s) throws ObjectNotFoundException {
         Optional<Type> type  = typeRepository.findByName(s);
+        return type.orElseThrow(ObjectNotFoundException::new);
+    }
 
-        if (type.isEmpty())
-            throw new UsernameNotFoundException("Данный тип не найден");
+    public Type loadTypeById(int id) throws ObjectNotFoundException {
+        Optional<Type> type  = typeRepository.findById(id);
+        return type.orElseThrow(ObjectNotFoundException::new);
+    }
 
-        return type.get();
+    @Transactional
+    public void deleteType(int id) throws ObjectNotFoundException{
+        Optional<Type> type = typeRepository.findById(id);
+        if(type.isEmpty()){
+            throw new ObjectNotFoundException();
+        }
+        typeRepository.delete(type.get());
+    }
+
+    @Transactional
+    public void updateType(int id, Type type) throws ObjectNotFoundException {
+        Optional<Type> type_old_optional = typeRepository.findById(id);
+        if(type_old_optional.isEmpty()){
+            throw new ObjectNotFoundException();
+        }
+        Type type_old = type_old_optional.get();
+        type_old.setName(type.getName());
+        typeRepository.save(type_old);
     }
 }

@@ -2,7 +2,6 @@ package bsuir.korotkov.onlinestore.util;
 
 import bsuir.korotkov.onlinestore.models.Type;
 import bsuir.korotkov.onlinestore.services.TypeService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -24,12 +23,12 @@ public class TypeValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Type type = (Type) target;
         try{
-            typeService.loadTypeByName(type.getName());
+           Type type2 = typeService.loadTypeByName(type.getName());
         }
-        catch (UsernameNotFoundException ignored){
+        catch (ObjectNotFoundException ignored){
             return;
         }
-        errors.rejectValue("name", "", "Данный тип уже добавлен");
+        errors.rejectValue("name", "", "Тип с данным названием уже существует");
 
     }
 }
