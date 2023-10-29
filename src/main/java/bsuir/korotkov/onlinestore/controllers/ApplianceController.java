@@ -1,21 +1,29 @@
 package bsuir.korotkov.onlinestore.controllers;
 
-import bsuir.korotkov.onlinestore.dto.ApplianceDTO;
+import bsuir.korotkov.onlinestore.dto.ApplianceDTORequest;
+import bsuir.korotkov.onlinestore.dto.ApplianceDTOResponse;
 import bsuir.korotkov.onlinestore.services.ApplianceService;
 import bsuir.korotkov.onlinestore.util.ApplianceDTOValidator;
 import bsuir.korotkov.onlinestore.util.Converter;
+import bsuir.korotkov.onlinestore.util.ErrorResponse;
 import bsuir.korotkov.onlinestore.util.ObjectNotCreatedException;
+import bsuir.korotkov.onlinestore.util.ObjectNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/appliances")
@@ -31,12 +39,41 @@ public class ApplianceController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> create(@Valid @ModelAttribute ApplianceDTO applianceDTO, BindingResult bindingResult) throws ObjectNotCreatedException, IOException {
+    public ResponseEntity<HttpStatus> create(@Valid @ModelAttribute ApplianceDTORequest applianceDTO, BindingResult bindingResult) throws ObjectNotCreatedException, IOException, ObjectNotFoundException {
         applianceDTOValidator.validate(applianceDTO,bindingResult);
         if(bindingResult.hasErrors()) {
             throw new ObjectNotCreatedException(Converter.convertErrorsToString(bindingResult));
         }
-        applianceService.create(applianceDTO);
+        applianceService.createAppliance(applianceDTO);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+    @GetMapping()
+    public List<ApplianceDTOResponse> getAll(){
+        return applianceService.getAllAppliances();
+    }
+
+    @GetMapping("/{id}")
+    public ApplianceDTOResponse getOne(@PathVariable("id") int id) throws ObjectNotFoundException {
+        ApplianceDTOResponse applianceDTOResponse = applianceService.loadApplianceById(id);
+        return applianceDTOResponse;
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id) throws ObjectNotFoundException {
+        applianceService.deleteAppliance(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handleException(ObjectNotFoundException e){
+        ErrorResponse response = new ErrorResponse("Товар не найден");
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handleException(ObjectNotCreatedException e){
+        ErrorResponse response = new ErrorResponse(e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }

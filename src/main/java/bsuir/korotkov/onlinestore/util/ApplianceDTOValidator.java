@@ -1,7 +1,6 @@
 package bsuir.korotkov.onlinestore.util;
 
-import bsuir.korotkov.onlinestore.dto.ApplianceDTO;
-import bsuir.korotkov.onlinestore.models.Appliance;
+import bsuir.korotkov.onlinestore.dto.ApplianceDTORequest;
 import bsuir.korotkov.onlinestore.services.BrandService;
 import bsuir.korotkov.onlinestore.services.TypeService;
 import org.springframework.stereotype.Component;
@@ -21,12 +20,12 @@ public class ApplianceDTOValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return ApplianceDTO.class.equals(clazz);
+        return ApplianceDTORequest.class.equals(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        ApplianceDTO applianceDTO = (ApplianceDTO) target;
+        ApplianceDTORequest applianceDTO = (ApplianceDTORequest) target;
         try {
             typeService.loadTypeById(applianceDTO.getType());
         } catch (ObjectNotFoundException e) {

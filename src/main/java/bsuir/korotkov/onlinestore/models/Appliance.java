@@ -30,6 +30,10 @@ public class Appliance {
     @NotNull(message = "Цена не может быть пустой")
     private int price;
 
+    @Column(name = "count")
+    @NotNull(message = "Количество не может быть пустым")
+    private int count;
+
     @Column(name = "img")
     @NotEmpty(message = "Картинка не может отсутсвовать")
     private String img;
@@ -55,6 +59,14 @@ public class Appliance {
     @OneToMany(mappedBy = "appliance_rating")
     private List<Rating> ratings;
 
+    public Appliance(String name, int price, String img, String description, int count) {
+        this.name = name;
+        this.price = price;
+        this.img = img;
+        this.description = description;
+        this.count = count;
+    }
+
     public Appliance() {
     }
 
@@ -65,6 +77,13 @@ public class Appliance {
         this.img = img;
     }
 
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public int getCount() {
+        return count;
+    }
     public void setId(int id) {
         this.id = id;
     }

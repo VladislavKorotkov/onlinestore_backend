@@ -25,9 +25,9 @@ public class SecurityConfig{
         this.jwtFilter = jwtFilter;
     }
 
-    private final String[] BLACK_LIST_POST = {"/api/brands","/api/types"};
-    private final String[] BLACK_LIST_PUT = {"/api/brands/{id}","/api/types/{id}"};
-    private final String[] BLACK_LIST_DELETE = {"/api/brands/{id}","/api/types/{id}"};
+    private final String[] BLACK_LIST_POST = {"/api/brands","/api/types", "/api/appliances"};
+    private final String[] BLACK_LIST_PUT = {"/api/brands/{id}","/api/types/{id}", "/api/appliances/{id}"};
+    private final String[] BLACK_LIST_DELETE = {"/api/brands/{id}","/api/types/{id}", "/api/appliances/{id}"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

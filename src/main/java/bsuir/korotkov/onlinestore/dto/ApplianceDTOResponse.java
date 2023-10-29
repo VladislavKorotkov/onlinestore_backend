@@ -1,32 +1,21 @@
 package bsuir.korotkov.onlinestore.dto;
 
-import bsuir.korotkov.onlinestore.models.Brand;
-import bsuir.korotkov.onlinestore.models.Type;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 
-public class ApplianceDTO {
-    @NotEmpty(message = "Название товара не может быть пустым")
+public class ApplianceDTOResponse {
+
     private String name;
-
-    @NotNull(message = "Цена не может быть пустой")
     private int price;
-
-    @NotNull(message = "Цена не может быть пустой")
-    private MultipartFile img;
-
-    @NotEmpty(message = "Описание не может быть пустым")
+    private String img;
     private String description;
-
-    @NotNull(message = "Цена не может быть пустой")
+    private int count;
     private int brand;
-
-    @NotNull(message = "Цена не может быть пустой")
+    private String brand_name;
+    private String type_name;
     private int type;
+
 
     public String getName() {
         return name;
@@ -44,11 +33,11 @@ public class ApplianceDTO {
         this.price = price;
     }
 
-    public MultipartFile getImg() {
+    public String getImg() {
         return img;
     }
 
-    public void setImg(MultipartFile img) {
+    public void setImg(String img) {
         this.img = img;
     }
 
@@ -60,12 +49,36 @@ public class ApplianceDTO {
         this.description = description;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     public int getBrand() {
         return brand;
     }
 
     public void setBrand(int brand) {
         this.brand = brand;
+    }
+
+    public String getBrand_name() {
+        return brand_name;
+    }
+
+    public void setBrand_name(String brand_name) {
+        this.brand_name = brand_name;
+    }
+
+    public String getType_name() {
+        return type_name;
+    }
+
+    public void setType_name(String type_name) {
+        this.type_name = type_name;
     }
 
     public int getType() {
@@ -76,15 +89,20 @@ public class ApplianceDTO {
         this.type = type;
     }
 
-    public ApplianceDTO() {
+    public ApplianceDTOResponse() {
     }
 
-    public ApplianceDTO(String name, int price, MultipartFile img, String description, int brand, int type) {
+    public ApplianceDTOResponse(String name, int price, String img, String description, int count, int brand, String brand_name, String type_name, int type) {
         this.name = name;
         this.price = price;
         this.img = img;
         this.description = description;
+        this.count = count;
         this.brand = brand;
+        this.brand_name = brand_name;
+        this.type_name = type_name;
         this.type = type;
     }
+
+
 }
