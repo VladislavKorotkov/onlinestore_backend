@@ -1,5 +1,6 @@
 package bsuir.korotkov.onlinestore.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -44,16 +45,20 @@ public class Appliance {
 
     @ManyToOne()
     @JoinColumn(name="type_id", referencedColumnName = "id")
-    private Type type_apl;
+    @JsonIgnore
+    private Type typeApl;
 
     @ManyToOne()
     @JoinColumn(name="brand_id", referencedColumnName = "id")
-    private Brand brand_apl;
+    @JsonIgnore
+    private Brand brandApl;
 
     @OneToMany(mappedBy = "appliance_ord_apl")
+    @JsonIgnore
     private List<OrderAppliances> order_appliances;
 
-    @OneToMany(mappedBy = "appliance_cart_apl")
+    @OneToMany(mappedBy = "cartAppliancesAppliance")
+    @JsonIgnore
     private List<CartAppliances> cart_appliances;
 
     @OneToMany(mappedBy = "appliance_rating")
@@ -104,12 +109,12 @@ public class Appliance {
         this.description = description;
     }
 
-    public void setType_apl(Type type_apl) {
-        this.type_apl = type_apl;
+    public void setTypeApl(Type type_apl) {
+        this.typeApl = type_apl;
     }
 
-    public void setBrand_apl(Brand brand_apl) {
-        this.brand_apl = brand_apl;
+    public void setBrandApl(Brand brand_apl) {
+        this.brandApl = brand_apl;
     }
 
     public void setOrder_appliances(List<OrderAppliances> order_appliances) {
@@ -144,12 +149,12 @@ public class Appliance {
         return description;
     }
 
-    public Type getType_apl() {
-        return type_apl;
+    public Type getTypeApl() {
+        return typeApl;
     }
 
-    public Brand getBrand_apl() {
-        return brand_apl;
+    public Brand getBrandApl() {
+        return brandApl;
     }
 
     public List<OrderAppliances> getOrder_appliances() {

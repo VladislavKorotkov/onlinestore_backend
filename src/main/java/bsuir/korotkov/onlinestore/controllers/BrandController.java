@@ -1,9 +1,7 @@
 package bsuir.korotkov.onlinestore.controllers;
 
 import bsuir.korotkov.onlinestore.dto.BrandDTO;
-import bsuir.korotkov.onlinestore.dto.TypeDTO;
 import bsuir.korotkov.onlinestore.models.Brand;
-import bsuir.korotkov.onlinestore.models.Type;
 import bsuir.korotkov.onlinestore.services.BrandService;
 import bsuir.korotkov.onlinestore.util.BrandValidator;
 import bsuir.korotkov.onlinestore.util.Converter;
@@ -13,11 +11,10 @@ import bsuir.korotkov.onlinestore.util.ObjectNotFoundException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +30,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/api/brands")
+@CrossOrigin
 @RestController
 public class BrandController {
     private BrandService brandService;

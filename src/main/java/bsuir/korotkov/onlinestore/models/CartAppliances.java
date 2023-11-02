@@ -24,11 +24,11 @@ public class CartAppliances {
 
     @ManyToOne
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
-    private Cart cart_cart_apl;
+    private Cart cartAppliancesCart;
 
     @ManyToOne
     @JoinColumn(name = "appliance_id", referencedColumnName = "id")
-    private Appliance appliance_cart_apl;
+    private Appliance cartAppliancesAppliance;
 
     public int getCount() {
         return count;
@@ -47,24 +47,24 @@ public class CartAppliances {
         this.id = id;
     }
 
-    public void setCart_cart_apl(Cart cart_cart_apl) {
-        this.cart_cart_apl = cart_cart_apl;
+    public void setCartAppliancesCart(Cart cart_cart_apl) {
+        this.cartAppliancesCart = cart_cart_apl;
     }
 
-    public void setAppliance_cart_apl(Appliance appliance_cart_apl) {
-        this.appliance_cart_apl = appliance_cart_apl;
+    public void setCartAppliancesAppliance(Appliance appliance_cart_apl) {
+        this.cartAppliancesAppliance = appliance_cart_apl;
     }
 
     public int getId() {
         return id;
     }
 
-    public Cart getCart_cart_apl() {
-        return cart_cart_apl;
+    public Cart getCartAppliancesCart() {
+        return cartAppliancesCart;
     }
 
-    public Appliance getAppliance_cart_apl() {
-        return appliance_cart_apl;
+    public Appliance getCartAppliancesAppliance() {
+        return cartAppliancesAppliance;
     }
 
     public CartAppliances() {

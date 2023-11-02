@@ -26,4 +26,13 @@ public class AccountDetailsService implements UserDetailsService {
 
         return new AccountDetails(account.get());
     }
+
+    public Account loadAccountByUsername(String username){
+        Optional<Account> account = accountRepository.findByUsername(username);
+
+        if (account.isEmpty())
+            throw new UsernameNotFoundException("Пользователь не найден");
+
+        return account.get();
+    }
 }

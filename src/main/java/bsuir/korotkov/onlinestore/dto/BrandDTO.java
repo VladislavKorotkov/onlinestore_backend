@@ -4,11 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotEmpty;
 
 public class BrandDTO {
-    @Column(name = "name")
+
     @NotEmpty(message="Название не может быть пустым")
     private String name;
 
-    @Column(name="country")
     @NotEmpty(message = "Страна не может быть пустой")
     private String country;
 

@@ -54,6 +54,6 @@ public class Type {
         this.name = name;
     }
 
-    @OneToMany(mappedBy = "type_apl")
+    @OneToMany(mappedBy = "typeApl")
     List<Appliance> appliances;
 }

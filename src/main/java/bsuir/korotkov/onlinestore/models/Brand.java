@@ -27,7 +27,7 @@ public class Brand {
     @NotEmpty(message = "Страна не может быть пустой")
     private String country;
 
-    @OneToMany(mappedBy = "brand_apl")
+    @OneToMany(mappedBy = "brandApl")
     List<Appliance> appliances;
 
     public int getId() {

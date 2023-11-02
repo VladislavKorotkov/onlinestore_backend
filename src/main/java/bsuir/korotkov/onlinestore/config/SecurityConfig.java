@@ -29,22 +29,22 @@ public class SecurityConfig{
     private final String[] BLACK_LIST_PUT = {"/api/brands/{id}","/api/types/{id}", "/api/appliances/{id}"};
     private final String[] BLACK_LIST_DELETE = {"/api/brands/{id}","/api/types/{id}", "/api/appliances/{id}"};
 
+    private final String[] AUTHORIZED_LIST = {"/api/cart/**"};
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers("/api/admin/**")
-                                .hasRole("ADMIN")
-                                .requestMatchers("/api/basket")
-                                .hasAnyRole("ADMIN","USER")
-                                .requestMatchers(HttpMethod.POST, BLACK_LIST_POST)
+                        req.requestMatchers(HttpMethod.POST, BLACK_LIST_POST)
                                 .hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, BLACK_LIST_DELETE)
                                 .hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, BLACK_LIST_PUT)
                                 .hasRole("ADMIN")
+                                .requestMatchers(AUTHORIZED_LIST)
+                                .authenticated()
                                 .anyRequest()
                                 .permitAll()
                 )

@@ -49,8 +49,8 @@ public class ApplianceService {
          if(brand.isEmpty() || type.isEmpty()){
              throw new ObjectNotCreatedException("Бренд или товар не найден");
          }
-         appliance.setBrand_apl(brand.get());
-         appliance.setType_apl(type.get());
+         appliance.setBrandApl(brand.get());
+         appliance.setTypeApl(type.get());
          applianceRepository.save(appliance);
      }
 
@@ -59,10 +59,38 @@ public class ApplianceService {
         return convertAppliancesToAppliancesDTOResponse(appliances);
      }
 
+    public List<ApplianceDTOResponse> getAllAppliancesFilterType(int typeId) throws ObjectNotFoundException {
+        Optional<Type> type = typeRepository.findById(typeId);
+        if(type.isEmpty()){
+            throw new ObjectNotFoundException("Тип не найден");
+        }
+        List<Appliance> appliances = applianceRepository.findAllByTypeApl(type.get());
+        return convertAppliancesToAppliancesDTOResponse(appliances);
+    }
+
+    public List<ApplianceDTOResponse> getAllAppliancesFilterBrand(int brandId) throws ObjectNotFoundException {
+        Optional<Brand> brand = brandRepository.findById(brandId);
+        if(brand.isEmpty()){
+            throw new ObjectNotFoundException("Бренд не найден");
+        }
+        List<Appliance> appliances = applianceRepository.findAllByBrandApl(brand.get());
+        return convertAppliancesToAppliancesDTOResponse(appliances);
+    }
+
+    public List<ApplianceDTOResponse> getAllAppliancesFilterBrandAndType(int brandId, int typeId) throws ObjectNotFoundException {
+        Optional<Brand> brand = brandRepository.findById(brandId);
+        Optional<Type> type = typeRepository.findById(typeId);
+        if(type.isEmpty()||brand.isEmpty()){
+            throw new ObjectNotFoundException("Бренд или тип не найден");
+        }
+        List<Appliance> appliances = applianceRepository.findAllByBrandAplAndTypeApl(brand.get(), type.get());
+        return convertAppliancesToAppliancesDTOResponse(appliances);
+    }
+
      public ApplianceDTOResponse loadApplianceById(int id) throws ObjectNotFoundException {
         Optional<Appliance> appliance = applianceRepository.findById(id);
         if(appliance.isEmpty()){
-            throw new ObjectNotFoundException();
+            throw new ObjectNotFoundException("Товар не найден");
         }
         return convertApplianceToApplianceDTOResponse(appliance.get());
      }
@@ -71,7 +99,7 @@ public class ApplianceService {
      public void deleteAppliance(int id) throws ObjectNotFoundException {
          Optional<Appliance> appliance = applianceRepository.findById(id);
          if(appliance.isEmpty()){
-             throw new ObjectNotFoundException();
+             throw new ObjectNotFoundException("Товар не найден");
          }
          applianceRepository.delete(appliance.get());
      }
@@ -107,15 +135,16 @@ public class ApplianceService {
 
      private ApplianceDTOResponse convertApplianceToApplianceDTOResponse(Appliance appliance){
         ApplianceDTOResponse applianceDTOResponse = new ApplianceDTOResponse();
-        applianceDTOResponse.setBrand(appliance.getBrand_apl().getId());
-        applianceDTOResponse.setBrand_name(appliance.getBrand_apl().getName());
-        applianceDTOResponse.setType(appliance.getType_apl().getId());
-        applianceDTOResponse.setType_name(appliance.getType_apl().getName());
+        applianceDTOResponse.setBrand(appliance.getBrandApl().getId());
+        applianceDTOResponse.setBrand_name(appliance.getBrandApl().getName());
+        applianceDTOResponse.setType(appliance.getTypeApl().getId());
+        applianceDTOResponse.setType_name(appliance.getTypeApl().getName());
         applianceDTOResponse.setCount(appliance.getCount());
         applianceDTOResponse.setDescription(appliance.getDescription());
         applianceDTOResponse.setImg(appliance.getImg());
         applianceDTOResponse.setName(appliance.getName());
         applianceDTOResponse.setPrice(appliance.getPrice());
+        applianceDTOResponse.setId(appliance.getId());
         return applianceDTOResponse;
      }
 }

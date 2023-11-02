@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -27,6 +29,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/api/appliances")
+@CrossOrigin
 @RestController
 public class ApplianceController {
     private final ApplianceDTOValidator applianceDTOValidator;
@@ -47,10 +50,27 @@ public class ApplianceController {
         applianceService.createAppliance(applianceDTO);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-    @GetMapping()
+
+    @GetMapping(produces = "application/json; charset=UTF-8")
     public List<ApplianceDTOResponse> getAll(){
         return applianceService.getAllAppliances();
     }
+
+    @GetMapping("/filter-brand-type")
+    public List<ApplianceDTOResponse> getAllFilterBrandAndType(@RequestParam("brandId") int brandId, @RequestParam("typeId") int typeId) throws ObjectNotFoundException {
+        return applianceService.getAllAppliancesFilterBrandAndType(brandId, typeId);
+    }
+
+    @GetMapping("/filter-brand")
+    public List<ApplianceDTOResponse> getAllFilterBrand(@RequestParam("brandId") int brandId) throws ObjectNotFoundException {
+        return applianceService.getAllAppliancesFilterBrand(brandId);
+    }
+
+    @GetMapping("/filter-type")
+    public List<ApplianceDTOResponse> getAllFilterType(@RequestParam("typeId") int typeId) throws ObjectNotFoundException {
+        return applianceService.getAllAppliancesFilterType(typeId);
+    }
+
 
     @GetMapping("/{id}")
     public ApplianceDTOResponse getOne(@PathVariable("id") int id) throws ObjectNotFoundException {
@@ -66,7 +86,7 @@ public class ApplianceController {
 
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handleException(ObjectNotFoundException e){
-        ErrorResponse response = new ErrorResponse("Товар не найден");
+        ErrorResponse response = new ErrorResponse(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 

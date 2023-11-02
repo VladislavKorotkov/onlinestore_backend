@@ -24,7 +24,7 @@ public class Cart {
     @JoinColumn(name = "account_id", referencedColumnName = "id")
     private Account account_cart;
 
-    @OneToMany(mappedBy = "cart_cart_apl")
+    @OneToMany(mappedBy = "cartAppliancesCart")
     private List<CartAppliances> cart_appliances;
 
     public int getId() {
