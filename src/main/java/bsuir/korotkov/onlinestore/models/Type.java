@@ -54,6 +54,10 @@ public class Type {
         this.name = name;
     }
 
+    public Type(String name) {
+        this.name = name;
+    }
+
     @OneToMany(mappedBy = "typeApl")
     List<Appliance> appliances;
 }

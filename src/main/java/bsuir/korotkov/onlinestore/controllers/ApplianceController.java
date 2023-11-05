@@ -51,7 +51,8 @@ public class ApplianceController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping(produces = "application/json; charset=UTF-8")
+    // charset=UTF-8
+    @GetMapping(produces = "application/json")
     public List<ApplianceDTOResponse> getAll(){
         return applianceService.getAllAppliances();
     }
