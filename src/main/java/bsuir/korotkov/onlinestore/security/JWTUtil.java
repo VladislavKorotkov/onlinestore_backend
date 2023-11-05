@@ -1,5 +1,6 @@
 package bsuir.korotkov.onlinestore.security;
 
+import bsuir.korotkov.onlinestore.models.Account;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -16,12 +17,14 @@ public class JWTUtil {
     @Value("${jwt_secret}")
     private String secret;
 
-    public String generateToken(String username) {
+    public String generateToken(Account account) {
         Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(360).toInstant());
 
         return JWT.create()
                 .withSubject("User details")
-                .withClaim("username", username)
+                .withClaim("username", account.getUsername())
+                .withClaim("id", account.getId())
+                .withClaim("role", account.getRole())
                 .withIssuedAt(new Date())
                 .withIssuer("onlinestore")
                 .withExpiresAt(expirationDate)

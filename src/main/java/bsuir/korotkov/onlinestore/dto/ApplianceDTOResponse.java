@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class ApplianceDTOResponse {
 
+    private int id;
     private String name;
     private int price;
     private String img;
@@ -92,7 +93,7 @@ public class ApplianceDTOResponse {
     public ApplianceDTOResponse() {
     }
 
-    public ApplianceDTOResponse(String name, int price, String img, String description, int count, int brand, String brand_name, String type_name, int type) {
+    public ApplianceDTOResponse(String name, int price, String img, String description, int count, int brand, String brand_name, String type_name, int type, int id) {
         this.name = name;
         this.price = price;
         this.img = img;
@@ -102,7 +103,18 @@ public class ApplianceDTOResponse {
         this.brand_name = brand_name;
         this.type_name = type_name;
         this.type = type;
+        this.id = id;
     }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
 
 
 }
