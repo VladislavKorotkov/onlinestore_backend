@@ -10,8 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import java.util.List;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @EnableWebSecurity
 @Configuration
@@ -20,21 +19,25 @@ public class SecurityConfig{
 
     private final JWTFilter jwtFilter;
 
-    public SecurityConfig(AccountDetailsService accountDetailsService, JWTFilter jwtFilter) {
+    private final CorsConfigurationSource corsConfigurationSource;
+
+    public SecurityConfig(AccountDetailsService accountDetailsService, JWTFilter jwtFilter, CorsConfigurationSource corsConfigurationSource) {
         this.accountDetailsService = accountDetailsService;
         this.jwtFilter = jwtFilter;
+        this.corsConfigurationSource = corsConfigurationSource;
     }
 
     private final String[] BLACK_LIST_POST = {"/api/brands","/api/types", "/api/appliances"};
     private final String[] BLACK_LIST_PUT = {"/api/brands/{id}","/api/types/{id}", "/api/appliances/{id}"};
     private final String[] BLACK_LIST_DELETE = {"/api/brands/{id}","/api/types/{id}", "/api/appliances/{id}"};
 
-    private final String[] AUTHORIZED_LIST = {"/api/cart/**"};
+    private final String[] AUTHORIZED_LIST = {"/api/cart/**", "/api/auth/change/{id}"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource))
                 .securityMatcher("/api/**")
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(HttpMethod.POST, BLACK_LIST_POST)
@@ -47,6 +50,7 @@ public class SecurityConfig{
                                 .authenticated()
                                 .anyRequest()
                                 .permitAll()
+
                 )
                 .sessionManagement((session) -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

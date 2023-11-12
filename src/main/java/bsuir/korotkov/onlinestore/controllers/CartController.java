@@ -77,7 +77,7 @@ public class CartController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateCartAppliancess(@PathVariable("id") int id, @RequestBody Map<String, Integer> count, @RequestHeader("Authorization") String token, BindingResult bindingResult) throws AccessException, ObjectNotFoundException, ObjectNotCreatedException {
+    public ResponseEntity<HttpStatus> updateCartAppliances(@PathVariable("id") int id, @RequestBody Map<String, Integer> count, @RequestHeader("Authorization") String token, BindingResult bindingResult) throws AccessException, ObjectNotFoundException, ObjectNotCreatedException {
         Account account = parseUsername(token);
         cartService.updateAppliance(account,id,count.get("count"));
         return ResponseEntity.ok(HttpStatus.OK);

@@ -92,7 +92,6 @@ public class CartService {
                     cartAppliance.getCartAppliancesAppliance().getPrice());
             cartDTOResponses.add(cartDTOResponse);
         }
-        System.out.println("dfdfsew");
         for(CartDTOResponse cartDTOResponse: cartDTOResponses){
             System.out.println(cartDTOResponse.getAppliance_id());
         }
