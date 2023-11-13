@@ -1,5 +1,6 @@
 package bsuir.korotkov.onlinestore.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
@@ -22,13 +24,13 @@ public class OrderAppliances {
     private int id;
 
     @Column(name = "count")
-    @NotEmpty(message = "Количество не может быть пустым")
+    @NotNull(message = "Количество не может быть пустым")
     private int count;
 
     @Column(name = "price_one")
-    @NotEmpty(message = "Цена не может быть пустой")
+    @NotNull(message = "Цена не может быть пустой")
     private int price_one;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order_ord_apl;
@@ -81,6 +83,13 @@ public class OrderAppliances {
         this.id = id;
         this.count = count;
         this.price_one = price_one;
+    }
+
+    public OrderAppliances(int count, int price_one, Order order_ord_apl, Appliance appliance_ord_apl) {
+        this.count = count;
+        this.price_one = price_one;
+        this.order_ord_apl = order_ord_apl;
+        this.appliance_ord_apl = appliance_ord_apl;
     }
 
     public OrderAppliances() {

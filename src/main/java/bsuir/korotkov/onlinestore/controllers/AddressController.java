@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/api/addresses")
@@ -47,10 +48,10 @@ public class AddressController {
     }
 
     @PostMapping()
-    public ResponseEntity<Address> create(@RequestBody @Valid AddressDTO addressDTO){
+    public ResponseEntity<Map<String, Integer>> create(@RequestBody @Valid AddressDTO addressDTO){
         Address address = convertToAddress(addressDTO);
-        Address new_address = addressService.createAddress(address);
-        return new ResponseEntity<>(new_address, HttpStatus.OK);
+        int id = addressService.createAddress(address);
+        return new ResponseEntity<>(Map.of("id", id), HttpStatus.OK);
     }
 
     @ExceptionHandler

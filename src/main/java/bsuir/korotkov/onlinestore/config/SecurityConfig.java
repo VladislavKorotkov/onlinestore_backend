@@ -26,12 +26,12 @@ public class SecurityConfig{
         this.jwtFilter = jwtFilter;
         this.corsConfigurationSource = corsConfigurationSource;
     }
-
+    private final String[] BLACK_LIST_GET = {"/api/orders/getAll"};
     private final String[] BLACK_LIST_POST = {"/api/brands","/api/types", "/api/appliances"};
     private final String[] BLACK_LIST_PUT = {"/api/brands/{id}","/api/types/{id}", "/api/appliances/{id}"};
     private final String[] BLACK_LIST_DELETE = {"/api/brands/{id}","/api/types/{id}", "/api/appliances/{id}"};
 
-    private final String[] AUTHORIZED_LIST = {"/api/cart/**", "/api/auth/change/{id}"};
+    private final String[] AUTHORIZED_LIST = {"/api/cart/**", "/api/auth/change/{id}", "/api/addresses/**", "/api/orders/**"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,6 +43,8 @@ public class SecurityConfig{
                         req.requestMatchers(HttpMethod.POST, BLACK_LIST_POST)
                                 .hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, BLACK_LIST_DELETE)
+                                .hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, BLACK_LIST_GET)
                                 .hasRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, BLACK_LIST_PUT)
                                 .hasRole("ADMIN")

@@ -14,6 +14,10 @@ public class AddressDTO {
     @NotEmpty(message = "Улица не может быть пустой")
     private String street;
 
+
+    @NotEmpty(message = "Номер дома не может быть пустым")
+    private String number_house;
+
     public String getCountry() {
         return country;
     }
@@ -56,6 +60,4 @@ public class AddressDTO {
         this.number_house = number_house;
     }
 
-    @NotEmpty(message = "Номер дома не может быть пустым")
-    private String number_house;
 }

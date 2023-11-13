@@ -1,17 +1,17 @@
 package bsuir.korotkov.onlinestore.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
-import org.apache.catalina.User;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,19 +24,19 @@ public class Order {
     private int id;
 
     @Column(name = "total")
-    @NotEmpty(message="Стоимость не может быть пустой")
+    @NotNull(message="Стоимость не может быть пустой")
     private int total;
 
     @Column(name = "is_paid")
-    @NotEmpty(message="Оплата не может быть пустой")
+    @NotNull(message="Оплата не может быть пустой")
     private boolean is_paid;
 
     @Column(name = "is_delivered")
-    @NotEmpty(message="Доставка не может быть пустой")
+    @NotNull(message="Доставка не может быть пустой")
     private boolean is_delivered;
 
     @Column(name="date_of_sale")
-    @NotEmpty(message = "Дата не может быть пустой")
+    @NotNull(message = "Дата не может быть пустой")
     private LocalDateTime date_of_sale;
 
     @ManyToOne
@@ -45,7 +45,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name="account_id", referencedColumnName = "id")
-    private Account account_order;
+    private Account accountOrder;
 
     @OneToMany(mappedBy = "order_ord_apl")
     private List<OrderAppliances> order_appliances;
@@ -77,8 +77,8 @@ public class Order {
         this.address_order = address_order;
     }
 
-    public void setAccount_order(Account account_order) {
-        this.account_order = account_order;
+    public void setAccountOrder(Account account_order) {
+        this.accountOrder = account_order;
     }
 
     public void setOrder_appliances(List<OrderAppliances> order_appliances) {
@@ -109,8 +109,8 @@ public class Order {
         return address_order;
     }
 
-    public Account getAccount_order() {
-        return account_order;
+    public Account getAccountOrder() {
+        return accountOrder;
     }
 
     public List<OrderAppliances> getOrder_appliances() {
@@ -125,7 +125,12 @@ public class Order {
         this.date_of_sale = date_of_sale;
     }
 
-
-
-
+    public Order(int total, boolean is_paid, boolean is_delivered, LocalDateTime date_of_sale, Address address_order, Account accountOrder) {
+        this.total = total;
+        this.is_paid = is_paid;
+        this.is_delivered = is_delivered;
+        this.date_of_sale = date_of_sale;
+        this.address_order = address_order;
+        this.accountOrder = accountOrder;
+    }
 }

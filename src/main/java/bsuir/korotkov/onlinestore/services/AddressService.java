@@ -28,18 +28,17 @@ public class AddressService {
     }
 
     @Transactional
-    public Address createAddress(Address address){
-
+    public int createAddress(Address address){
         Optional<Address> old_address = Optional.ofNullable(addressRepository.findAddressByCountryAndCityAndStreetAndNumber(address.getCountry(),
                 address.getCity(),
                 address.getStreet(),
                 address.getNumber()));
         if(old_address.isPresent()){
-            return old_address.get();
+            return old_address.get().getId();
         }
 
         addressRepository.save(address);
-        return address;
+        return address.getId();
     }
 
 }

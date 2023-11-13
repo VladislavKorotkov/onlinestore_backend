@@ -1,5 +1,6 @@
 package bsuir.korotkov.onlinestore.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,18 +29,22 @@ public class Account {
 
     @NotEmpty(message = "Пароль не может быть пустым")
     @Column(name = "password")
+    @JsonIgnore
     private String password;
 
     @Column(name = "role")
     private String role;
 
-    @OneToMany(mappedBy = "account_order")
+    @OneToMany(mappedBy = "accountOrder")
+    @JsonIgnore
     private List<Order> orders;
 
     @OneToOne(mappedBy = "account_cart")
+    @JsonIgnore
     private Cart cart;
 
     @OneToMany(mappedBy = "account_rating")
+    @JsonIgnore
     private List<Rating> ratings;
 
     public Account(String username, String password, String role) {
