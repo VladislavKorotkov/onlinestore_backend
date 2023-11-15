@@ -85,10 +85,35 @@ public class OrderService {
             throw new ObjectNotFoundException("Заказ не найден");
         }
         Order order = order_opt.get();
-        if(order.getAccountOrder().equals(account)||account.getRole().equals("ROLE_ADMIN")){
+        if(account.getRole().equals("ROLE_ADMIN")){
+            return order;
+        }
+        else if(order.getAccountOrder().equals(account)){
             return order;
         }
         throw new AccessException("Доступ запрещен");
 
+    }
+
+    public void updateOrderToDelivered(int id) throws ObjectNotFoundException, ObjectNotCreatedException {
+        Optional<Order> order_opt = orderRepository.findById(id);
+        if(order_opt.isEmpty()){
+            throw new ObjectNotFoundException("Заказ не найден");
+        }
+        Order order = order_opt.get();
+        if(order.isIs_delivered()){
+            throw new ObjectNotCreatedException("Заказ уже доставлен");
+        }
+        order.setIs_delivered(true);
+        orderRepository.save(order);
+    }
+
+    public void deleteOrder(int id) throws ObjectNotFoundException {
+        Optional<Order> order_opt = orderRepository.findById(id);
+        if(order_opt.isEmpty()){
+            throw new ObjectNotFoundException("Заказ не найден");
+        }
+        Order order = order_opt.get();
+        orderRepository.delete(order);
     }
 }

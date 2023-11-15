@@ -8,8 +8,10 @@ import bsuir.korotkov.onlinestore.services.AccountDetailsService;
 import bsuir.korotkov.onlinestore.services.RegistrationService;
 import bsuir.korotkov.onlinestore.util.AccessException;
 import bsuir.korotkov.onlinestore.util.AccountValidator;
+import bsuir.korotkov.onlinestore.util.Converter;
 import bsuir.korotkov.onlinestore.util.ErrorResponse;
 import bsuir.korotkov.onlinestore.util.ObjectIsPresentException;
+import bsuir.korotkov.onlinestore.util.ObjectNotCreatedException;
 import bsuir.korotkov.onlinestore.util.ObjectNotFoundException;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
@@ -22,7 +24,9 @@ import org.springframework.security.web.header.Header;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -66,10 +71,30 @@ public class AuthController {
             return new ResponseEntity<>(Map.of("message", bindingResult.getAllErrors().get(0).getDefaultMessage()), HttpStatus.CONFLICT);
         }
 
-        registrationService.register(account);
+        registrationService.register(account, "ROLE_USER");
 
         String token = jwtUtil.generateToken(account);
         return new ResponseEntity<>(Map.of("jwtToken", token), HttpStatus.OK);
+    }
+
+    @PostMapping("/registrationForAdmin")
+    public ResponseEntity<HttpStatus> performRegistrationForAdmin(@RequestBody @Valid AccountDTO accountDTO,
+                                                                   BindingResult bindingResult) throws ObjectNotCreatedException {
+        Account account = convertToPerson(accountDTO);
+
+        accountValidator.validate(account, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            throw new ObjectNotCreatedException(Converter.convertErrorsToString(bindingResult));
+        }
+        if(accountDTO.getRole().isEmpty()){
+            registrationService.register(account, "ROLE_USER");
+        }
+        else{
+            registrationService.register(account, accountDTO.getRole());
+        }
+        jwtUtil.generateToken(account);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -96,6 +121,18 @@ public class AuthController {
         return new ResponseEntity<>(Map.of("jwtToken", new_token), HttpStatus.OK);
     }
 
+    @GetMapping()
+    public ResponseEntity<List<Account>> getAll(){
+        return new ResponseEntity<>(accountDetailsService.loadAllAccounts(), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") int id,@RequestHeader("Authorization") String token) throws AccessException, ObjectNotFoundException {
+        Account account = parseUsername(token);
+        registrationService.deleteAccount(id, account);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
     public Account convertToPerson(AccountDTO accountDTO) {
         return this.modelMapper.map(accountDTO, Account.class);
     }
@@ -105,6 +142,12 @@ public class AuthController {
     }
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handleException(ObjectNotFoundException e){
+        ErrorResponse response = new ErrorResponse(e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handleException(ObjectNotCreatedException e){
         ErrorResponse response = new ErrorResponse(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }

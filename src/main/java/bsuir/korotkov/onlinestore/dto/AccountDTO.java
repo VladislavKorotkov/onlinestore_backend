@@ -11,6 +11,8 @@ public class AccountDTO {
     @NotEmpty(message = "Пароль не может быть пустым")
     private String password;
 
+    private String role;
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -30,6 +32,20 @@ public class AccountDTO {
     public AccountDTO(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public AccountDTO(String username, String password, String role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public AccountDTO() {

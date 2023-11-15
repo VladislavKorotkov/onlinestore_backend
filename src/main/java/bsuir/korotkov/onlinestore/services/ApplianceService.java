@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -101,6 +102,10 @@ public class ApplianceService {
          if(appliance.isEmpty()){
              throw new ObjectNotFoundException("Товар не найден");
          }
+         File file  = new File("src/main/resources/static/" + appliance.get().getImg());
+         if(file.exists() && file.isFile()){
+             file.delete();
+         }
          applianceRepository.delete(appliance.get());
      }
 
@@ -135,10 +140,22 @@ public class ApplianceService {
 
      private ApplianceDTOResponse convertApplianceToApplianceDTOResponse(Appliance appliance){
         ApplianceDTOResponse applianceDTOResponse = new ApplianceDTOResponse();
-        applianceDTOResponse.setBrand(appliance.getBrandApl().getId());
-        applianceDTOResponse.setBrand_name(appliance.getBrandApl().getName());
-        applianceDTOResponse.setType(appliance.getTypeApl().getId());
-        applianceDTOResponse.setType_name(appliance.getTypeApl().getName());
+        if(appliance.getBrandApl()==null){
+            applianceDTOResponse.setBrand(-1);
+            applianceDTOResponse.setBrand_name("Отсутствует");
+        }
+        else{
+            applianceDTOResponse.setBrand(appliance.getBrandApl().getId());
+            applianceDTOResponse.setBrand_name(appliance.getBrandApl().getName());
+        }
+         if(appliance.getTypeApl()==null){
+             applianceDTOResponse.setType(-1);
+             applianceDTOResponse.setType_name("Отсутствует");
+         }
+         else{
+             applianceDTOResponse.setType(appliance.getTypeApl().getId());
+             applianceDTOResponse.setType_name(appliance.getTypeApl().getName());
+         }
         applianceDTOResponse.setCount(appliance.getCount());
         applianceDTOResponse.setDescription(appliance.getDescription());
         applianceDTOResponse.setImg(appliance.getImg());

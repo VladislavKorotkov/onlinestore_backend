@@ -28,13 +28,25 @@ public class RegistrationService {
     }
 
     @Transactional
-    public void register(Account account){
+    public void register(Account account, String role){
         account.setPassword(passwordEncoder.encode(account.getPassword()));
-        account.setRole("ROLE_USER");
+        account.setRole(role);
         accountRepository.save(account);
         Cart cart = new Cart();
         cart.setAccount_cart(account);
         cartRepository.save(cart);
+    }
+
+    @Transactional
+    public void deleteAccount(int id, Account account) throws ObjectNotFoundException, AccessException {
+        Optional<Account> account_opt = accountRepository.findById(id);
+        if(account_opt.isEmpty()){
+            throw new ObjectNotFoundException("Аккаунт не найден");
+        }
+        if(account.getId()==id){
+            throw new AccessException("Невозможно удалить собственный аккаунт");
+        }
+        accountRepository.delete(account_opt.get());
     }
 
     @Transactional
