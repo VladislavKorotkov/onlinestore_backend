@@ -43,7 +43,7 @@ public class Account {
     @JsonIgnore
     private Cart cart;
 
-    @OneToMany(mappedBy = "account_rating")
+    @OneToMany(mappedBy = "accountRating")
     @JsonIgnore
     private List<Rating> ratings;
 

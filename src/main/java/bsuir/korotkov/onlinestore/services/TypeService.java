@@ -1,7 +1,9 @@
 package bsuir.korotkov.onlinestore.services;
 
 
+import bsuir.korotkov.onlinestore.models.Appliance;
 import bsuir.korotkov.onlinestore.models.Type;
+import bsuir.korotkov.onlinestore.repositories.ApplianceRepository;
 import bsuir.korotkov.onlinestore.repositories.TypeRepository;
 import bsuir.korotkov.onlinestore.util.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
@@ -14,8 +16,11 @@ import java.util.Optional;
 public class TypeService {
     private TypeRepository typeRepository;
 
-    public TypeService(TypeRepository typeRepository) {
+    private ApplianceRepository applianceRepository;
+
+    public TypeService(TypeRepository typeRepository, ApplianceRepository applianceRepository) {
         this.typeRepository = typeRepository;
+        this.applianceRepository = applianceRepository;
     }
 
     @Transactional
@@ -41,7 +46,11 @@ public class TypeService {
     public void deleteType(int id) throws ObjectNotFoundException{
         Optional<Type> type = typeRepository.findById(id);
         if(type.isEmpty()){
-            throw new ObjectNotFoundException();
+            throw new ObjectNotFoundException("Товар не найден");
+        }
+        List<Appliance> applianceList = applianceRepository.findAllByTypeApl(type.get());
+        if(!applianceList.isEmpty()){
+            throw new ObjectNotFoundException("Невозможно удалить тип. Удалите соответствующие товары");
         }
         typeRepository.delete(type.get());
     }

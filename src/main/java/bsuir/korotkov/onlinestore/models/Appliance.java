@@ -39,6 +39,10 @@ public class Appliance {
     @NotEmpty(message = "Картинка не может отсутсвовать")
     private String img;
 
+    @Column(name = "rating")
+    private int rating;
+
+
     @Column(name = "description")
     @NotEmpty(message = "Описание не может быть пустым")
     private String description;
@@ -61,7 +65,8 @@ public class Appliance {
     @JsonIgnore
     private List<CartAppliances> cart_appliances;
 
-    @OneToMany(mappedBy = "appliance_rating")
+    @OneToMany(mappedBy = "applianceRating")
+    @JsonIgnore
     private List<Rating> ratings;
 
     public Appliance(String name, int price, String img, String description, int count) {
@@ -167,5 +172,14 @@ public class Appliance {
 
     public List<Rating> getRatings() {
         return ratings;
+    }
+
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }

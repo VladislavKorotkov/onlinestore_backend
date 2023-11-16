@@ -17,6 +17,29 @@ public class ApplianceDTOResponse {
     private String type_name;
     private int type;
 
+    private int rating;
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public ApplianceDTOResponse(int id, String name, int price, String img, String description, int count, int brand, String brand_name, String type_name, int type, int rating) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.img = img;
+        this.description = description;
+        this.count = count;
+        this.brand = brand;
+        this.brand_name = brand_name;
+        this.type_name = type_name;
+        this.type = type;
+        this.rating = rating;
+    }
 
     public String getName() {
         return name;

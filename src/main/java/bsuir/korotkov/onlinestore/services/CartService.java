@@ -92,9 +92,6 @@ public class CartService {
                     cartAppliance.getCartAppliancesAppliance().getPrice());
             cartDTOResponses.add(cartDTOResponse);
         }
-        for(CartDTOResponse cartDTOResponse: cartDTOResponses){
-            System.out.println(cartDTOResponse.getAppliance_id());
-        }
         return cartDTOResponses;
     }
 }

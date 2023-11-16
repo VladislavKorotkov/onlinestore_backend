@@ -86,7 +86,7 @@ public class TypeController {
 
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handleException(ObjectNotFoundException e){
-        ErrorResponse response = new ErrorResponse("Тип не найден");
+        ErrorResponse response = new ErrorResponse(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 

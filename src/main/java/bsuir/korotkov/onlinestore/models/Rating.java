@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 
 @Entity
@@ -20,17 +20,17 @@ public class Rating {
     private int id;
 
     @Column(name = "rate")
-    @NotEmpty(message = "Рейтинг не может быть пустым")
+    @NotNull(message = "Рейтинг не может быть пустым")
     @Range(min = 1, max = 5)
     private int rate;
 
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "id")
-    private Account account_rating;
+    private Account accountRating;
 
     @ManyToOne
     @JoinColumn(name = "appliance_id", referencedColumnName = "id")
-    private Appliance appliance_rating;
+    private Appliance applianceRating;
 
     public void setId(int id) {
         this.id = id;
@@ -40,16 +40,20 @@ public class Rating {
         this.rate = rate;
     }
 
-    public void setAccount_rating(Account account_rating) {
-        this.account_rating = account_rating;
+    public void setAccountRating(Account account_rating) {
+        this.accountRating = account_rating;
     }
 
-    public void setAppliance_rating(Appliance appliance_rating) {
-        this.appliance_rating = appliance_rating;
+    public void setApplianceRating(Appliance appliance_rating) {
+        this.applianceRating = appliance_rating;
     }
 
     public Rating(int id, int rate) {
         this.id = id;
+        this.rate = rate;
+    }
+
+    public Rating(int rate) {
         this.rate = rate;
     }
 
@@ -61,15 +65,20 @@ public class Rating {
         return rate;
     }
 
-    public Account getAccount_rating() {
-        return account_rating;
+    public Account getAccountRating() {
+        return accountRating;
     }
 
-    public Appliance getAppliance_rating() {
-        return appliance_rating;
+    public Appliance getApplianceRating() {
+        return applianceRating;
     }
 
     public Rating() {
     }
 
+    public Rating(int rate, Account accountRating, Appliance applianceRating) {
+        this.rate = rate;
+        this.accountRating = accountRating;
+        this.applianceRating = applianceRating;
+    }
 }

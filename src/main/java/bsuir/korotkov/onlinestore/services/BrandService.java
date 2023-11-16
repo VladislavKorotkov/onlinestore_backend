@@ -1,10 +1,9 @@
 package bsuir.korotkov.onlinestore.services;
 
-import bsuir.korotkov.onlinestore.models.Account;
+import bsuir.korotkov.onlinestore.models.Appliance;
 import bsuir.korotkov.onlinestore.models.Brand;
-import bsuir.korotkov.onlinestore.models.Type;
+import bsuir.korotkov.onlinestore.repositories.ApplianceRepository;
 import bsuir.korotkov.onlinestore.repositories.BrandRepository;
-import bsuir.korotkov.onlinestore.security.AccountDetails;
 import bsuir.korotkov.onlinestore.util.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,8 +16,11 @@ import java.util.Optional;
 public class BrandService {
     private final BrandRepository brandRepository;
 
-    public BrandService(BrandRepository brandRepository) {
+    private final ApplianceRepository applianceRepository;
+
+    public BrandService(BrandRepository brandRepository, ApplianceRepository applianceRepository) {
         this.brandRepository = brandRepository;
+        this.applianceRepository = applianceRepository;
     }
 
     @Transactional
@@ -47,7 +49,11 @@ public class BrandService {
     public void deleteBrand(int id) throws ObjectNotFoundException{
         Optional<Brand> brand = brandRepository.findById(id);
         if(brand.isEmpty()){
-            throw new ObjectNotFoundException();
+            throw new ObjectNotFoundException("Бренд не найден");
+        }
+        List<Appliance> applianceList = applianceRepository.findAllByBrandApl(brand.get());
+        if(!applianceList.isEmpty()){
+            throw new ObjectNotFoundException("Невозможно удалить бренд. Удалите соответствующие товары");
         }
         brandRepository.delete(brand.get());
     }

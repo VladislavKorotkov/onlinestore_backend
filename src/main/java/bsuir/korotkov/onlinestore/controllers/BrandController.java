@@ -86,7 +86,7 @@ public class BrandController {
 
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handleException(ObjectNotFoundException e){
-        ErrorResponse response = new ErrorResponse("Бренд не найден");
+        ErrorResponse response = new ErrorResponse(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 

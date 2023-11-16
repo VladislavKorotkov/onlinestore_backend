@@ -68,9 +68,6 @@ public class OrderService {
     }
     public List<Order> getAllOrdersForUser(Account account) throws ObjectNotFoundException {
         List<Order> orderList = orderRepository.findAllByAccountOrder(account);
-        if(orderList.isEmpty()){
-            throw new ObjectNotFoundException("Заказы отсутствуют");
-        }
         return orderList;
     }
 

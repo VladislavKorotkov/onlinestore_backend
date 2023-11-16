@@ -39,7 +39,7 @@ public class RatingController {
     }
 
     @PostMapping()
-    public ResponseEntity<HttpStatus> add(@RequestBody @Valid RatingDTO ratingDTO, @RequestHeader("Authorization") String token){
+    public ResponseEntity<HttpStatus> add(@RequestBody @Valid RatingDTO ratingDTO, @RequestHeader("Authorization") String token) throws AccessException, ObjectNotFoundException, ObjectNotCreatedException {
         Account account = parseUsername(token);
         ratingService.addRating(ratingDTO,account);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -72,4 +72,5 @@ public class RatingController {
         String username = jwtUtil.validateTokenAndRetrieveClaim(token.substring(7));
         return accountDetailsService.loadAccountByUsername(username);
     }
+
 }

@@ -12,6 +12,7 @@ import bsuir.korotkov.onlinestore.util.ObjectNotCreatedException;
 import bsuir.korotkov.onlinestore.util.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -52,6 +53,7 @@ public class ApplianceService {
          }
          appliance.setBrandApl(brand.get());
          appliance.setTypeApl(type.get());
+         appliance.setRating(1);
          applianceRepository.save(appliance);
      }
 
@@ -162,6 +164,7 @@ public class ApplianceService {
         applianceDTOResponse.setName(appliance.getName());
         applianceDTOResponse.setPrice(appliance.getPrice());
         applianceDTOResponse.setId(appliance.getId());
+        applianceDTOResponse.setRating(appliance.getRating());
         return applianceDTOResponse;
      }
 }
