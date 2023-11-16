@@ -43,7 +43,6 @@ public class ApplianceController {
 
     @PostMapping()
     public ResponseEntity<HttpStatus> create(@Valid @ModelAttribute ApplianceDTORequest applianceDTO, BindingResult bindingResult) throws ObjectNotCreatedException, IOException, ObjectNotFoundException {
-        System.out.println(applianceDTO.getDescription());
         applianceDTOValidator.validate(applianceDTO,bindingResult);
         if(bindingResult.hasErrors()) {
             throw new ObjectNotCreatedException(Converter.convertErrorsToString(bindingResult));

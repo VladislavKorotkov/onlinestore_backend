@@ -12,7 +12,6 @@ import bsuir.korotkov.onlinestore.util.ObjectNotCreatedException;
 import bsuir.korotkov.onlinestore.util.ObjectNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -33,18 +32,18 @@ public class ApplianceService {
 
     private final BrandRepository brandRepository;
 
-    public ApplianceService(ApplianceRepository applianceRepository, ResourceLoader resourceLoader, TypeRepository typeRepository, BrandRepository brandRepository) {
+    private final FileStorageService fileStorageService;
+
+    public ApplianceService(ApplianceRepository applianceRepository, ResourceLoader resourceLoader, TypeRepository typeRepository, BrandRepository brandRepository, FileStorageService fileStorageService) {
         this.applianceRepository = applianceRepository;
         this.typeRepository = typeRepository;
         this.brandRepository = brandRepository;
+        this.fileStorageService = fileStorageService;
     }
 
      @Transactional
     public void createAppliance(ApplianceDTORequest applianceDTO) throws IOException, ObjectNotCreatedException {
-         byte[] bytes = applianceDTO.getImg().getBytes();
-         String name_img = UUID.randomUUID().toString() + ".jpg";
-         Path path = Paths.get("src/main/resources/static/" + name_img);
-         Files.write(path, bytes);
+         String name_img = fileStorageService.storeFile(applianceDTO.getImg());
          Appliance appliance = new Appliance(applianceDTO.getName(), applianceDTO.getPrice(), name_img, applianceDTO.getDescription(), applianceDTO.getCount());
          Optional<Type> type = typeRepository.findById(applianceDTO.getType());
          Optional<Brand> brand = brandRepository.findById(applianceDTO.getBrand());
@@ -53,7 +52,7 @@ public class ApplianceService {
          }
          appliance.setBrandApl(brand.get());
          appliance.setTypeApl(type.get());
-         appliance.setRating(1);
+         appliance.setRating(5);
          applianceRepository.save(appliance);
      }
 
@@ -104,10 +103,7 @@ public class ApplianceService {
          if(appliance.isEmpty()){
              throw new ObjectNotFoundException("Товар не найден");
          }
-         File file  = new File("src/main/resources/static/" + appliance.get().getImg());
-         if(file.exists() && file.isFile()){
-             file.delete();
-         }
+         fileStorageService.deleteFile(appliance.get().getImg());
          applianceRepository.delete(appliance.get());
      }
 
