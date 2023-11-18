@@ -74,7 +74,8 @@ class ApplianceControllerTest {
                                         "price": 123,
                                         "img": "50a62691-137c-4dd9-8405-8e8292fca5f1.jpg",
                                         "description": "Отличный холодильник",
-                                        "count": 12
+                                        "count": 12,
+                                        "rating": 5
                                     }
                                 ]
                                 """)
@@ -85,6 +86,7 @@ class ApplianceControllerTest {
         Appliance appliance = new Appliance(name, price, img, description, count);
         appliance.setTypeApl(type);
         appliance.setBrandApl(brand);
+        appliance.setRating(5);
         return applianceRepository.save(appliance);
     }
 

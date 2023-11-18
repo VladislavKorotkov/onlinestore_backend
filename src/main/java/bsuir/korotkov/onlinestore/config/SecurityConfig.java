@@ -30,7 +30,7 @@ public class SecurityConfig{
     private final String[] BLACK_LIST_POST = {"/api/brands","/api/types", "/api/appliances", "/api/auth/registrationForAdmin"};
     private final String[] BLACK_LIST_PUT = {"/api/brands/{id}","/api/types/{id}", "/api/appliances/{id}", "/api/orders/{id}"};
     private final String[] BLACK_LIST_DELETE = {"/api/brands/{id}","/api/types/{id}", "/api/appliances/{id}", "/api/orders/{id}", "api/auth/{id}"};
-    private final String[] AUTHORIZED_LIST = {"/api/cart/**", "/api/auth/change/{id}", "/api/addresses/**", "/api/orders/**", "/api/ratings"};
+    private final String[] AUTHORIZED_LIST = {"/api/cart/**", "/api/auth/change/{id}", "/api/orders/**", "/api/ratings"};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
